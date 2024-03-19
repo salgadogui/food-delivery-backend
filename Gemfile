@@ -44,9 +44,13 @@ gem "bootsnap", require: false
 # Use Active Storage variants [https://guides.rubyonrails.org/active_storage_overview.html#transforming-images]
 # gem "image_processing", "~> 1.2"
 
+gem 'diff-lcs', '~> 1.5.1'
+
 group :development, :test do
   # See https://guides.rubyonrails.org/debugging_rails_applications.html#debugging-with-the-debug-gem
   gem "rspec-rails"
+  gem 'shoulda-matchers'
+  gem 'faker'
   gem "debug", platforms: %i[ mri mswin mswin64 mingw x64_mingw ]
 end
 
@@ -61,4 +65,7 @@ group :development do
   # gem "spring"
 
   gem "error_highlight", ">= 0.4.0", platforms: [:ruby]
+  gem "bullet"
 end
+
+gem "devise", "~> 4.9"
