@@ -1,4 +1,5 @@
 class User < ApplicationRecord
+  enum :role, [:admin, :seller, :buyer]
   has_many :stores
 
   # Include default devise modules. Others available are:
