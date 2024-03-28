@@ -1,7 +1,7 @@
 class RegistrationsController < ApplicationController
   rescue_from User::InvalidToken, with: :not_authorized
 
-  skip_forgery_protection only: [:create, :me]
+  skip_forgery_protection only: [:create, :me, :sign_in]
   before_action :authenticate!, only: [:me]
 
   def me

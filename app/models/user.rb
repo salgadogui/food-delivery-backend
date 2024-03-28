@@ -1,5 +1,6 @@
 class User < ApplicationRecord
   class InvalidToken < StandardError; end
+  # ... placeholder
 
   enum :role, [:admin, :seller, :buyer]
   has_many :stores
@@ -10,7 +11,7 @@ class User < ApplicationRecord
          :recoverable, :rememberable, :validatable
 
   def self.token_for(user)
-    jwt_headers = { exp: 1.second.from_now.to_i }
+    jwt_headers = { exp: 1.hour.from_now.to_i }
     payload = { id: user.id, email: user.email, role: user.role }
     JWT.encode payload.merge(jwt_headers), "muito.secreto", "HS256"
   end

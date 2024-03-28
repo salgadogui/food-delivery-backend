@@ -1,7 +1,7 @@
 class ApplicationController < ActionController::Base
 
   def current_user
-    if request.format = Mime[:json]
+    if request.format == Mime[:json]
       @user
     else
       super
