@@ -1,9 +1,11 @@
 class RegistrationsController < ApplicationController
+  rescue_from User::InvalidToken, with: :not_authorized
+
   skip_forgery_protection only: [:create, :me]
   before_action :authenticate!, only: [:me]
 
   def me
-    # placeholder
+    render json: { id: current_user.id, email: current_user.email }
   end
 
   def sign_in
@@ -34,5 +36,9 @@ class RegistrationsController < ApplicationController
 
     def user_params
       params.require(:user).permit(:email, :password, :password_confirmation, :role)
+    end
+
+    def not_authorized(e)
+      render json: { message: "Nope!" }, status: 401
     end
 end
