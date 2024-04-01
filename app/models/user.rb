@@ -20,7 +20,7 @@ class User < ApplicationRecord
     begin
       decoded = JWT.decode token, "muito.secreto", true, { algorithm: "HS256" }
       user_data = decoded[0].with_indifferent_access
-      User.find(user_data[:id])
+      # User.find(user_data[:id])
 
     rescue JWT::ExpiredSignature
       raise InvalidToken.new

@@ -5,7 +5,7 @@ class RegistrationsController < ApplicationController
   before_action :authenticate!, only: [:me]
 
   def me
-    render json: { id: current_user.id, email: current_user.email }
+    render json: { id: current_user[:id], email: current_user[:email] }
   end
 
   def sign_in
