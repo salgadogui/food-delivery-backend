@@ -63,11 +63,29 @@ RSpec.configure do |config|
   # arbitrary gems may also be filtered via:
   # config.filter_gems_from_backtrace("gem name")
 
-  config.include(
-    Devise::Test::IntegrationHelpers,
-    type: :request
-  )
+  module APIRequestHelpers
+    def api_sign_in(user, credential)
+      post(
+        "/sign_in",
+        headers: {
+          "Accept" => "application/json",
+          "X-API-KEY" => credential.key
+        },
+        params: {
+          login: {
+            email: user.email,
+            password: user.password
+        }
+        }
+      )
+      JSON.parse(response.body)
+    end
+  end
+
+  config.include Devise::Test::IntegrationHelpers, type: :request
+  config.include APIRequestHelpers, type: :request
 end
+
 
 Shoulda::Matchers.configure do |config|
   config.integrate do |with|

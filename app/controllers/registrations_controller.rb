@@ -9,19 +9,21 @@ class RegistrationsController < ApplicationController
   end
 
   def sign_in
-    user = User.find_by(email: sign_in_params[:email])
+    access = current_credential.access
+    user = User.where(role: access).find_by(email: sign_in_params[:email])
 
     if !user || !user.valid_password?(sign_in_params[:password])
-      render json: { message: "Nope!" }, status: 401
+      render json: { message: "Nope! Access: #{access}" }, status: 401
     else
-      token = User.token_for(user) 
+      token = User.token_for(user)
       render json: { email: user.email, token: token }
     end
   end
 
   def create
     @user = User.new(user_params)
-    if @user.role == 'admin'
+    @user.role = current_credential.access
+    if request.headers["X-API-KEY"] == :admin
       render json: { error: 'Role admin is not allowed.' }, status: :forbidden
     elsif @user.save
       render json: {"email": @user.email}
@@ -35,7 +37,7 @@ class RegistrationsController < ApplicationController
     end
 
     def user_params
-      params.require(:user).permit(:email, :password, :password_confirmation, :role)
+      params.require(:user).permit(:email, :password, :password_confirmation)
     end
 
     def not_authorized(e)
