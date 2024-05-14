@@ -4,7 +4,11 @@ class StoresController < ApplicationController
 
   # GET /stores or /stores.json
   def index
-    @stores = Store.all
+    if current_user.admin?
+      @stores = Store.all
+    else
+      @stores = Store.where(user: current_user)
+    end
   end
 
   # GET /stores/1 or /stores/1.json
@@ -67,6 +71,12 @@ class StoresController < ApplicationController
 
     # Only allow a list of trusted parameters through.
     def store_params
-      params.require(:store).permit(:name)
+      required = params.require(:store)
+
+      if current_user.admin?
+        required.permit(:name, :user)
+      else
+        required.permite(:name)
+      end
     end
 end
