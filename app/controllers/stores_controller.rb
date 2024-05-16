@@ -9,6 +9,11 @@ class StoresController < ApplicationController
     else
       @stores = Store.where(user: current_user)
     end
+
+    respond_to do |format|
+      format.html
+      format.json { render json: @stores, status: :ok }
+    end
   end
 
   # GET /stores/1 or /stores/1.json
