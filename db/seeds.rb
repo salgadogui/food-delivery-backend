@@ -1,3 +1,6 @@
+apiKey = Credential.create_access :seller
+apiKey.update_attribute :key, "ldd+iZEBZvJ9x3FVM2azZdTujDM="
+
 admin = User.find_by(
   email: "admin@example.com"
 )
@@ -12,41 +15,28 @@ if !admin
   admin.save!
 end
 
-["Orange Curry", "Belly King"].each do |store|
+usernames = ["Orange Curry", "Belly King"]
+usernames.each do |username|
   user = User.new(
-  email: "#{store.split.map { |s| s.downcase }.join(".")}@example.com",
-  password: "123456",
-  password_confirmation: "123456",
-  role: :seller
+    email: "#{username.split.map { |s| s.downcase }.join(".")}@example.com",
+    password: "123456",
+    password_confirmation: "123456",
+    role: :seller
   )
   user.save!
-  
-  Store.find_or_create_by!(
+
+  stores = Array.new(5) { Faker::Company.name }
+  stores.each do |store|
+    Store.find_or_create_by!(
       name: store, user: user
     )
-end
 
-[
-  "Massaman Curry",
-  "Risotto with Seafood",
-  "Tuna Sashimi",
-  "Fish and Chips",
-  "Pasta Carbonara"
-].each do |dish|
-  store = Store.find_by(name: "Orange Curry")
-  Product.find_or_create_by!(
-    title: dish, store: store
-  )
-end
-[
-  "Mushroom Risotto",
-  "Caesar Salad",
-  "Mushroom Risotto",
-  "Tuna Sashimi",
-  "Chicken Milanese"
-].each do |dish|
-  store = Store.find_by(name: "Belly King")
-  Product.find_or_create_by!(
-    title: dish, store: store
-  )
+    products = Array.new(10) { Faker::Food.dish }
+    products.each do |product|
+      created_store = Store.find_by(name: store)
+      Product.find_or_create_by!(
+        title: product, price: rand(15..50), store: created_store
+      )
+    end
+  end
 end
