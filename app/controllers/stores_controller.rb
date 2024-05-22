@@ -1,6 +1,7 @@
 class StoresController < ApplicationController
   before_action :authenticate!
   before_action :set_store, only: %i[ show edit update destroy ]
+  skip_forgery_protection only: [:create]
 
   # GET /stores or /stores.json
   def index
@@ -81,7 +82,7 @@ class StoresController < ApplicationController
       if current_user.admin?
         required.permit(:name, :user)
       else
-        required.permite(:name)
+        required.permit(:name)
       end
     end
 end
