@@ -3,8 +3,9 @@ Rails.application.routes.draw do
   root to: "welcome#index"
   get 'registrations/create'
   devise_for :users
-  resources :stores
-  resources :products
+  resources :stores do
+    resources :products
+  end
 
   post "new" => "registrations#create", as: :create_registration
   get "me" => "registrations#me"
