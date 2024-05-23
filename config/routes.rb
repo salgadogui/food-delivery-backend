@@ -7,6 +7,7 @@ Rails.application.routes.draw do
     resources :products
   end
 
+  get "products" => "products#index"
   post "new" => "registrations#create", as: :create_registration
   get "me" => "registrations#me"
   post "sign_in" => "registrations#sign_in"

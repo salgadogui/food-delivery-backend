@@ -15,7 +15,9 @@ class ProductsController < ApplicationController
   end
 
   def show
-    @product = Product.find(product_params[:id])
+    # modificar para procurar por product_id e store_id
+    @product = Product.find_by(
+      id: params[:id], store_id: params[:store_id])
   end
 
   private
