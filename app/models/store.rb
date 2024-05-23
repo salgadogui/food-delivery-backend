@@ -1,5 +1,6 @@
 class Store < ApplicationRecord
   belongs_to :user
+  has_many :products
   before_validation :ensure_seller
   validates :name,
             presence: true,

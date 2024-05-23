@@ -2,8 +2,9 @@
 <div>
     <% @products.each do |product| %>
         <div>
-            <h3><%= product.title %></h3>
+            <h3><%= product.name %></h3>
             <p>Store: <%= product.store[:name] %></p>
+            <p>User: <%= product.store[:user_id] %>
         </div>
     <hr/>
     <% end %>
