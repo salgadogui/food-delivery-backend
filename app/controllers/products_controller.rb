@@ -1,5 +1,5 @@
 class ProductsController < ApplicationController
-  before_action :authenticate_user!
+  before_action :authenticate!
 
   def index
     if current_user.admin?
@@ -7,13 +7,12 @@ class ProductsController < ApplicationController
     else
       @products = Product.includes(:store).where(store: current_user.stores)
     end
+
+    respond_to do |format|
+      format.html
+      format.json { render json: @products, status: :ok }
+    end
   end
-
-  #   if !current_user.admin?
-  #     redirect_to root_path, notice: "No permission for you!"
-  #   end
-
-  # @products = Product.includes(:store)
 
   def show
     @product = Product.find(product_params[:id])
@@ -22,6 +21,6 @@ class ProductsController < ApplicationController
   private
 
     def product_params
-      params.require(:product).permit(:name, :price, :store)
+      params.require(:product).permit(:name, :price, :store_id)
     end
 end
