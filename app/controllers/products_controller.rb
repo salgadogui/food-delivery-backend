@@ -1,5 +1,6 @@
 class ProductsController < ApplicationController
   before_action :authenticate!
+  skip_forgery_protection only: [:create]
 
   def index
     if current_user.admin?
@@ -15,9 +16,27 @@ class ProductsController < ApplicationController
   end
 
   def show
-    # modificar para procurar por product_id e store_id
     @product = Product.find_by(
       id: params[:id], store_id: params[:store_id])
+  end
+
+  def new
+    @product = Product.new
+  end
+
+  def create
+    @store = Store.find(params[:store_id])
+    @product = @store.products.new(product_params)
+
+    respond_to do |format|
+      if @product.save
+        format.html { redirect_to store_path(@store), notice: "Product was successfully created." }
+        format.json { render :show, status: :created, location: @store }
+      else
+        format.html { render :new, status: :unprocessable_entity }
+        format.json { render json: @product.errors, status: :unprocessable_entity }
+      end
+    end
   end
 
   private

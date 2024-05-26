@@ -1,10 +1,18 @@
 <p style="color: green"><%= notice %></p>
 
-<%= render @store %>
-
 <div>
   <%= link_to "Edit this store", edit_store_path(@store) %> |
-  <%= link_to "Back to stores", stores_path %>
+  <%= link_to "Back to stores", stores_path %> |
 
   <%= button_to "Destroy this store", @store, method: :delete %>
 </div>
+
+<%= render @store %>
+
+<h2>Store products:</h2>
+<%= link_to "New product" %>
+
+<% @store.products.each do |product| %>
+  <p><strong>Product name</strong>:</p>
+  <p><%= product.name %></p><hr>
+<% end %>
