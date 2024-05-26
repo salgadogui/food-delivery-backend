@@ -16,6 +16,7 @@ class ProductsController < ApplicationController
   end
 
   def show
+    @store = Store.find(params[:store_id])
     @product = Product.find_by(
       id: params[:id], store_id: params[:store_id])
   end
@@ -30,7 +31,7 @@ class ProductsController < ApplicationController
 
     respond_to do |format|
       if @product.save
-        format.html { redirect_to store_path(@store), notice: "Product was successfully created." }
+        format.html { redirect_to store_products_path(@store), notice: "Product was successfully created." }
         format.json { render :show, status: :created, location: @store }
       else
         format.html { render :new, status: :unprocessable_entity }

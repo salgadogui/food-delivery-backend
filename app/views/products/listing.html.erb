@@ -1,0 +1,12 @@
+<h1>Products Listing</h1>
+<div>
+    <% @products.each do |product| %>
+        <div>
+            <h3><%= product.name %></h3>
+            <p>Store: <%= product.store[:name] %></p>
+            <p>User: <%= product.store[:user_id] %>
+        </div>
+    <hr/>
+    <% end %>
+</div>
+<div><%= link_to "Back to Homepage", root_path %></div>
