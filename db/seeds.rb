@@ -1,8 +1,13 @@
 apiKey = Credential.create_access :seller
 apiKey.update_attribute :key, "ldd+iZEBZvJ9x3FVM2azZdTujDM="
 
-admin = User.find_by(
-  email: "admin@example.com"
+admin = User.find_by(email: "admin@example.com")
+
+buyer = User.create!(
+  email: "buyer@example.com",
+  password: "123456",
+  password_confirmation: "123456",
+  role: :buyer
 )
 
 if !admin
@@ -35,7 +40,7 @@ usernames.each do |username|
     products.each do |product|
       created_store = Store.find_by(name: store)
       Product.find_or_create_by!(
-        title: product, price: rand(15..50), store: created_store
+        name: product, price: rand(15..50), store: created_store
       )
     end
   end
