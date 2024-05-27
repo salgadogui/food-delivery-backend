@@ -1,0 +1,13 @@
+<h1>Orders Listing</h1>
+<div>
+    <% @orders.each do |order| %>
+        <div>
+            <h3><%= product.name %></h3>
+            <p>Store: <%= order.store[:name] %></p>
+            <p>User: <%= order.user_id %>
+        </div>
+    <hr/>
+    <% end %>
+</div>
+<div><%= link_to "Back to Homepage", root_path %></div>
+<div><%= link_to "New Order", new_store_order_path %>

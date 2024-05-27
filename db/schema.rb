@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2024_05_26_231427) do
+ActiveRecord::Schema[7.1].define(version: 2024_05_27_000441) do
   create_table "credentials", force: :cascade do |t|
     t.integer "access"
     t.string "key", null: false
@@ -34,6 +34,8 @@ ActiveRecord::Schema[7.1].define(version: 2024_05_26_231427) do
     t.decimal "total_value"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.integer "store_id", null: false
+    t.index ["store_id"], name: "index_orders_on_store_id"
     t.index ["user_id"], name: "index_orders_on_user_id"
   end
 
@@ -69,6 +71,7 @@ ActiveRecord::Schema[7.1].define(version: 2024_05_26_231427) do
 
   add_foreign_key "order_items", "orders"
   add_foreign_key "order_items", "products"
+  add_foreign_key "orders", "stores"
   add_foreign_key "orders", "users"
   add_foreign_key "products", "stores"
   add_foreign_key "stores", "users"

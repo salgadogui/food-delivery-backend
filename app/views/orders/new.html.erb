@@ -1,0 +1,38 @@
+<%= form_with(model: [@store, @order], local: true) do |form| %>
+  <% if @order.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@order.errors.count, "error") %> prohibited this order from being saved:</h2>
+      <ul>
+        <% @order.errors.full_messages.each do |message| %>
+          <li><%= message %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+<!-- 
+  <div class="field">
+    <%= form.label :user_id %>
+    <%= form.hidden_field :user_id, value: current_user.id %>
+  </div>
+
+  <div class="field">
+    <%= form.label :total_value %>
+    <%= form.text_field :total_value %>
+  </div>
+-->
+  <div class="field">
+    <%= form.fields_for :order_items do |order_item_form| %>
+      <div class="nested-fields">
+        <%= order_item_form.label :product_id %>
+        <%= order_item_form.select :product_id, Product.all.map { |p| [p.name, p.id] }, include_blank: true %>
+        
+        <%= order_item_form.label :quantity %>
+        <%= order_item_form.number_field :quantity, min: 1 %>
+      </div>
+    <% end %>
+  </div>
+
+  <div class="actions">
+    <%= form.submit %>
+  </div>
+<% end %>

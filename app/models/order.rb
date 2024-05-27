@@ -14,6 +14,6 @@ class Order < ApplicationRecord
   end
 
   def ensure_user_is_buyer
-    errors.add(:user, "must be a buyer to create an order") unless user&.buyer?
+    errors.add(:user, "must be a buyer to create an order") unless (user&.buyer? || user&.admin?)
   end
 end

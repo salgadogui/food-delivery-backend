@@ -5,6 +5,7 @@ Rails.application.routes.draw do
   devise_for :users
   resources :stores do
     resources :products
+    resources :orders
   end
 
   get "products" => "products#index"

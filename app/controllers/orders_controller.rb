@@ -1,18 +1,22 @@
 class OrdersController < ApplicationController
+  before_action :find_store, only: [:new, :create]
+
+  def index
+    if current_user.admin?
+      @orders = Order.all
+    else
+      @orders = Order.where(user: current_user)
+    end
+  end
+
   def new
-    @store = Store.find(params[:store_id])
     @order = @store.orders.new
     @order.order_items.build
   end
 
   def create
-    @store = Store.find(params[:store_id])
     @order = @store.orders.new(order_params)
     @order.user = current_user
-
-    @order.order_items.each do |item|
-      item.price = item.product.price
-    end
 
     if @order.save
       redirect_to @order, notice: 'Order was successfully created.'
@@ -27,7 +31,12 @@ class OrdersController < ApplicationController
 
   private
 
+  def find_store
+    @store = Store.find(params[:store_id])
+  end
+
   def order_params
-    params.require(:order).permit(order_items_attributes: [:product_id, :quantity, :price])
+    params.require(:order).permit(
+      order_items_attributes: [:store_id, :product_id, :quantity, :price])
   end
 end
