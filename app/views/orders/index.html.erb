@@ -2,7 +2,6 @@
 <div>
     <% @orders.each do |order| %>
         <div>
-            <h3><%= product.name %></h3>
             <p>Store: <%= order.store[:name] %></p>
             <p>User: <%= order.user_id %>
         </div>

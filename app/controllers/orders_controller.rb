@@ -18,8 +18,12 @@ class OrdersController < ApplicationController
     @order = @store.orders.new(order_params)
     @order.user = current_user
 
+    @order.order_items.each do |item|
+      item.price = item.product.price
+    end
+
     if @order.save
-      redirect_to @order, notice: 'Order was successfully created.'
+      redirect_to store_order_path(@store, @order), notice: 'Order was successfully created.'
     else
       render :new
     end
@@ -36,7 +40,7 @@ class OrdersController < ApplicationController
   end
 
   def order_params
-    params.require(:order).permit(
-      order_items_attributes: [:store_id, :product_id, :quantity, :price])
+    params.require(:order).permit(:id, :user_id, :store_id,
+      order_items_attributes: [:id, :product_id, :quantity])
   end
 end
