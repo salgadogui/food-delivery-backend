@@ -3,12 +3,11 @@ class StoresController < ApplicationController
   before_action :set_store, only: %i[ show edit update destroy ]
   skip_forgery_protection only: [:create]
 
-  # GET /stores or /stores.json
   def index
     if current_user.admin?
       @stores = Store.all
     else
-      @stores = Store.where(user: current_user)
+      @stores = Store.kept.where(user: current_user)
     end
 
     respond_to do |format|
@@ -17,23 +16,19 @@ class StoresController < ApplicationController
     end
   end
 
-  # GET /stores/1 or /stores/1.json
   def show
   end
 
-  # GET /stores/new
   def new
     @store = Store.new
   end
 
-  # GET /stores/1/edit
   def edit
   end
 
-  # POST /stores or /stores.json
   def create
     @store = Store.new(store_params)
-    @store.user = current_user ## devise
+    @store.user = current_user
 
     respond_to do |format|
       if @store.save
@@ -46,8 +41,9 @@ class StoresController < ApplicationController
     end
   end
 
-  # PATCH/PUT /stores/1 or /stores/1.json
   def update
+    @store.undiscard if params.dig(:restore)
+
     respond_to do |format|
       if @store.update(store_params)
         format.html { redirect_to store_url(@store), notice: "Store was successfully updated." }
@@ -59,23 +55,20 @@ class StoresController < ApplicationController
     end
   end
 
-  # DELETE /stores/1 or /stores/1.json
   def destroy
-    @store.destroy!
+    @store.discard
 
     respond_to do |format|
-      format.html { redirect_to stores_url, notice: "Store was successfully destroyed." }
+      format.html { redirect_to stores_url, notice: "Store was successfully discarded." }
       format.json { head :no_content }
     end
   end
 
   private
-    # Use callbacks to share common setup or constraints between actions.
     def set_store
       @store = Store.find(params[:id])
     end
 
-    # Only allow a list of trusted parameters through.
     def store_params
       required = params.require(:store)
 

@@ -7,6 +7,13 @@ class Order < ApplicationRecord
   before_save :calculate_total_value
   before_validation :ensure_user_is_buyer
 
+  include Discard::Model
+  scope :kept, -> { undiscarded.joins(:store).merge(Store.kept) }
+
+  def kept?
+    undiscarded? && store.kept?
+  end
+
   private
 
   def calculate_total_value

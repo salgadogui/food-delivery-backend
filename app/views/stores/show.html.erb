@@ -4,7 +4,9 @@
   <%= link_to "Edit this store", edit_store_path(@store) %> |
   <%= link_to "Back to stores", stores_path %> |
 
-  <%= button_to "Destroy this store", @store, method: :delete %>
+  <%= content_tag :div, class: 'field' do %>
+    <%= button_to "Discard this store", @store, method: :delete %>
+  <% end if !@store.discarded?%>
 </div>
 
 <%= render @store %>

@@ -36,11 +36,11 @@ class OrdersController < ApplicationController
   private
 
   def find_store
-    @store = Store.find(params[:store_id])
+    @store = Store.kept.find(params[:store_id])
   end
 
   def order_params
-    params.require(:order).permit(:id, :user_id, :store_id,
+    params.require(:order).permit(:user_id, :store_id,
       order_items_attributes: [:id, :product_id, :quantity])
   end
 end

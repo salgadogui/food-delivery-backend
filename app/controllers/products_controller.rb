@@ -6,7 +6,8 @@ class ProductsController < ApplicationController
     if current_user.admin?
       @products = Product.includes(:store)
     else
-      @products = Product.includes(:store).where(store: current_user.stores)
+      @products = Product.includes(:store)
+        .where(store: current_user.stores.kept)
     end
 
     respond_to do |format|
