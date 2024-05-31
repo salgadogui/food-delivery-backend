@@ -4,11 +4,6 @@ class OrdersController < ApplicationController
   skip_forgery_protection only: [:create]
 
   def index
-    if current_user
-      puts "Has current_user"
-    else
-      puts "Has no current_user"
-    end
     if current_user.admin?
       @orders = Order.includes(:store)
     else
