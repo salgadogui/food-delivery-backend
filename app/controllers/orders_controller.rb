@@ -1,11 +1,24 @@
 class OrdersController < ApplicationController
+  before_action :authenticate!
   before_action :find_store, only: [:new, :create]
+  skip_forgery_protection only: [:create]
 
   def index
-    if current_user.admin?
-      @orders = Order.all
+    if current_user
+      puts "Has current_user"
     else
-      @orders = Order.where(user: current_user)
+      puts "Has no current_user"
+    end
+    if current_user.admin?
+      @orders = Order.includes(:store)
+    else
+      @orders = Order.includes(:store)
+        .where(store: current_user.stores.kept)
+    end
+
+    respond_to do |format|
+      format.html
+      format.json { render json: @orders, status: :ok }
     end
   end
 
@@ -35,12 +48,12 @@ class OrdersController < ApplicationController
 
   private
 
-  def find_store
-    @store = Store.kept.find(params[:store_id])
-  end
+    def find_store
+      @store = Store.kept.find(params[:store_id])
+    end
 
-  def order_params
-    params.require(:order).permit(:user_id, :store_id,
-      order_items_attributes: [:id, :product_id, :quantity])
-  end
+    def order_params
+      params.require(:order).permit(:user_id, :store_id,
+        order_items_attributes: [:id, :product_id, :quantity])
+    end
 end

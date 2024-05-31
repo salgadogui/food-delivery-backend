@@ -16,11 +16,11 @@ class Order < ApplicationRecord
 
   private
 
-  def calculate_total_value
-    self.total_value = order_items.sum { |item| item.price * item.quantity }
-  end
+    def calculate_total_value
+      self.total_value = order_items.sum { |item| item.price * item.quantity }
+    end
 
-  def ensure_user_is_buyer
-    errors.add(:user, "must be a buyer to create an order") unless (user&.buyer? || user&.admin?)
-  end
+    def ensure_user_is_buyer
+      errors.add(:user, "must be a buyer to create an order") unless (user&.buyer? || user&.admin?)
+    end
 end

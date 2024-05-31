@@ -10,8 +10,10 @@ class ApplicationController < ActionController::Base
 
   def authenticate!
     if request.format == Mime[:json]
+      puts "In json authenticate! method"
       check_token!
     else
+      puts "Not in json authenticate method"
       authenticate_user!
     end
   end

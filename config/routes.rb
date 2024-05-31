@@ -9,6 +9,7 @@ Rails.application.routes.draw do
   end
 
   get "products" => "products#index"
+  get "orders" => "orders#index"
   post "new" => "registrations#create", as: :create_registration
   get "me" => "registrations#me"
   post "sign_in" => "registrations#sign_in"
