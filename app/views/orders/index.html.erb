@@ -1,10 +1,8 @@
 <h1>Orders Listing</h1>
-<div>
+<div id="orders">
     <% @orders.each do |order| %>
-        <div>
-            <p>Store: <%= order.store[:name] %></p>
-            <p>User: <%= order.user_id %>
-        </div>
+        <%= render order %>
+        <p><%= link_to "Show this order", store_order_path(order.store, order) %></p>
     <hr/>
     <% end %>
 </div>

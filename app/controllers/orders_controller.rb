@@ -38,7 +38,9 @@ class OrdersController < ApplicationController
   end
 
   def show
-    @order = Order.find(params[:id])
+    @store = Store.kept.find(params[:store_id])
+    @order = Order.find_by(
+      id: params[:id], store_id: params[:store_id])
   end
 
   private
