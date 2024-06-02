@@ -15,6 +15,11 @@
 <%= link_to "New product" %>
 
 <% @store.products.each do |product| %>
-  <p><strong>Product name</strong>:</p>
-  <p><%= product.name %></p><hr>
+  <p>
+    <strong>Id: </strong>
+    <%= product.id %>
+    <strong>Name: </strong>
+    <%= product.name %>
+    <hr>
+  </p>
 <% end %>

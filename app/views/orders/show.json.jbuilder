@@ -5,3 +5,4 @@ json.order_items @order.order_items do |order_item|
 end
 
 json.store @order.store, :id, :name
+json.user @order.user, :id, :email
