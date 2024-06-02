@@ -5,15 +5,10 @@ class OrdersController < ApplicationController
 
   def index
     if current_user.admin?
-      @orders = Order.includes(:store)
+      @orders = Order.includes(:store, :order_items)
     else
-      @orders = Order.includes(:store)
+      @orders = Order.includes(:store, :order_items)
         .where(store: current_user.stores.kept)
-    end
-
-    respond_to do |format|
-      format.html
-      format.json { render json: @orders, status: :ok }
     end
   end
 
@@ -50,7 +45,7 @@ class OrdersController < ApplicationController
     end
 
     def order_params
-      params.require(:order).permit(:user_id, :store_id,
+      params.require(:order).permit(:user_id,
         order_items_attributes: [:id, :product_id, :quantity])
     end
 end

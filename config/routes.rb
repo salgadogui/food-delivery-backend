@@ -1,8 +1,8 @@
 Rails.application.routes.draw do
-
   root to: "welcome#index"
   get 'registrations/create'
   devise_for :users
+
   resources :stores do
     resources :products
     resources :orders

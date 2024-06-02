@@ -1,5 +1,8 @@
-apiKey = Credential.create_access :seller
-apiKey.update_attribute :key, "ldd+iZEBZvJ9x3FVM2azZdTujDM="
+sellerApiKey = Credential.create_access :seller
+sellerApiKey.update_attribute :key, "ldd+iZEBZvJ9x3FVM2azZdTujDM="
+
+buyerApiKey = Credential.create_access :buyer
+buyerApiKey.update_attribute :key, "pMzZsImP6EiKzqySwJ8mltFWSyI="
 
 admin = User.find_by(email: "admin@example.com")
 
