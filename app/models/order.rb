@@ -7,6 +7,30 @@ class Order < ApplicationRecord
   before_save :calculate_total_value
   before_validation :ensure_user_is_buyer
 
+  state_machine initial: :order_placed do
+    state :order_placed
+    state :order_confirmed
+    state :out_for_delivery
+    state :delivered
+    state :canceled
+
+    event :confirm_order do
+      transition order_placed: :order_confirmed
+    end
+
+    event :out_for_delivery do
+      transition order_confirmed: :out_for_delivery
+    end
+
+    event :deliver_order do
+      transition out_for_delivery: :delivered
+    end
+
+    event :cancel_order do
+      transition any - [:delivered, :canceled] => :canceled
+    end
+  end
+
   include Discard::Model
   scope :kept, -> { undiscarded.joins(:store).merge(Store.kept) }
 

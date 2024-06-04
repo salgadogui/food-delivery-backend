@@ -1,4 +1,13 @@
 <h1>Order Details</h1>
 <%= render @order %>
+<p><strong>Products:</strong></p>
+<% @order.order_items.each do |order_item| %>
+    <p>
+        Id: <%= order_item.id %>,
+        Quantity: <%= order_item.quantity %>,
+        Price: <%= order_item.price %>
+    </p>
+    <hr/>
+<% end %>
 <p><%= link_to "Back to store's orders", store_orders_url %></p>
 

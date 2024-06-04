@@ -75,3 +75,7 @@ gem "jwt", "~> 2.8"
 gem "rack-cors", "~> 2.0"
 
 gem 'discard', '~> 1.2'
+
+gem 'state_machines'
+
+gem 'state_machines-activerecord'
