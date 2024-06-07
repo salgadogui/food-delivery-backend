@@ -2,6 +2,7 @@ class StoresController < ApplicationController
   before_action :authenticate!
   before_action :set_store, only: %i[ show edit update destroy ]
   skip_forgery_protection only: [:create]
+  skip_before_action :verify_authenticity_token, only: [:destroy, :update]
 
   def index
     if current_user.admin?
@@ -60,7 +61,7 @@ class StoresController < ApplicationController
 
     respond_to do |format|
       format.html { redirect_to stores_url, notice: "Store was successfully discarded." }
-      format.json { head :no_content }
+      format.json { render :show, status: :ok, location: @store }
     end
   end
 
