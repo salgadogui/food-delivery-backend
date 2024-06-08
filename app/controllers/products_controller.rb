@@ -1,6 +1,7 @@
 class ProductsController < ApplicationController
   before_action :authenticate!
   skip_forgery_protection only: [:create]
+  skip_before_action :verify_authenticity_token, only: [:destroy, :update]
 
   def index
     if current_user.admin?
@@ -38,6 +39,31 @@ class ProductsController < ApplicationController
         format.html { render :new, status: :unprocessable_entity }
         format.json { render json: @product.errors, status: :unprocessable_entity }
       end
+    end
+  end
+
+  def update
+    @store = Store.find(params[:store_id])
+    @product = Product.find(params[:id])
+
+    respond_to do |format|
+      if @product.update(product_params)
+        format.html { redirect_to store_product_path(@store, @product), notice: "Product was successfully updated." }
+        format.json { render :show, status: :ok, location: store_product_url(@store, @product) }
+      else
+        format.html { render :edit, status: :unprocessable_entity }
+        format.json { render json: @product.errors, status: :unprocessable_entity }
+      end
+    end
+  end
+
+  def destroy
+    @product = Product.find(params[:id])
+    @product.destroy
+
+    respond_to do |format|
+      format.html { redirect_to products_url, notice: "Product was successfully destroyed." }
+      format.json { render :show, status: :ok, location: @store }
     end
   end
 
