@@ -58,12 +58,13 @@ class ProductsController < ApplicationController
   end
 
   def destroy
+    @store = Store.find(params[:store_id])
     @product = Product.find(params[:id])
     @product.destroy
 
     respond_to do |format|
       format.html { redirect_to products_url, notice: "Product was successfully destroyed." }
-      format.json { render :show, status: :ok, location: @store }
+      format.json { render :show, status: :ok, location: store_product_url(@store, @product) }
     end
   end
 
