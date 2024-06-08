@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2024_06_04_013041) do
+ActiveRecord::Schema[7.1].define(version: 2024_06_08_225323) do
   create_table "credentials", force: :cascade do |t|
     t.integer "access"
     t.string "key", null: false
@@ -57,6 +57,7 @@ ActiveRecord::Schema[7.1].define(version: 2024_06_04_013041) do
     t.datetime "updated_at", null: false
     t.integer "user_id"
     t.datetime "discarded_at"
+    t.string "state"
     t.index ["discarded_at"], name: "index_stores_on_discarded_at"
     t.index ["user_id"], name: "index_stores_on_user_id"
   end

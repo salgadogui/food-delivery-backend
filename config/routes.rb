@@ -6,6 +6,10 @@ Rails.application.routes.draw do
   resources :stores do
     resources :products
     resources :orders
+
+    member do
+      patch :toggle_state
+    end
   end
 
   get "products" => "products#index"

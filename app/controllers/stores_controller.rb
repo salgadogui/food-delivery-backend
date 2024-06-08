@@ -1,8 +1,8 @@
 class StoresController < ApplicationController
   before_action :authenticate!
-  before_action :set_store, only: %i[ show edit update destroy ]
+  before_action :set_store, only: %i[ show edit update destroy toggle_state]
   skip_forgery_protection only: [:create]
-  skip_before_action :verify_authenticity_token, only: [:destroy, :update]
+  skip_before_action :verify_authenticity_token, only: [:destroy, :update, :toggle_state]
 
   def index
     if current_user.admin?
@@ -62,6 +62,20 @@ class StoresController < ApplicationController
     respond_to do |format|
       format.html { redirect_to stores_url, notice: "Store was successfully discarded." }
       format.json { render :show, status: :ok, location: @store }
+    end
+  end
+
+  def toggle_state
+    if @store.closed?
+      @store.open_store
+    else
+      @store.close_store
+    end
+
+    if @store.save
+      render json: @store, status: :ok
+    else
+      render json: @store.errors, status: :unprocessable_entity
     end
   end
 

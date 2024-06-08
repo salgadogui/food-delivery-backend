@@ -8,6 +8,19 @@ class Store < ApplicationRecord
             length: { minimum: 3 }
   include Discard::Model
 
+  state_machine initial: :closed do
+    state :open
+    state :closed
+
+    event :open_store do
+      transition closed: :open
+    end
+
+    event :close_store do
+      transition open: :closed
+    end
+  end 
+
   private
 
     def ensure_seller
