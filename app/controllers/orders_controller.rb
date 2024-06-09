@@ -1,6 +1,7 @@
 class OrdersController < ApplicationController
   before_action :authenticate!
   before_action :find_store, only: [:new, :create]
+  before_action :check_store_state, only: [:create, :update]
   skip_forgery_protection only: [:create]
 
   def index
@@ -47,5 +48,11 @@ class OrdersController < ApplicationController
     def order_params
       params.require(:order).permit(:user_id,
         order_items_attributes: [:id, :product_id, :quantity])
+    end
+
+    def check_store_state
+      if @store.closed?
+        render json: { error: "Store is closed and cannot accept any orders." }, status: :forbidden
+      end
     end
 end
