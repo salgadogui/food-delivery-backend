@@ -7,8 +7,10 @@ class StoresController < ApplicationController
   def index
     if current_user.admin?
       @stores = Store.all
-    else
+    elsif current_user.seller?
       @stores = Store.kept.where(user: current_user)
+    elsif current_user.buyer?
+      @stores = Store.kept
     end
 
     respond_to do |format|
