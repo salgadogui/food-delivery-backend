@@ -1,7 +1,7 @@
 class OrdersController < ApplicationController
   before_action :authenticate!
   before_action :find_store, only: [:new, :create]
-  before_action :check_store_state, only: [:create, :update]
+  before_action :check_store_state, only: [:create]
   skip_forgery_protection only: [:create]
 
   def index

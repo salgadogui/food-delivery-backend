@@ -79,3 +79,5 @@ gem 'discard', '~> 1.2'
 gem 'state_machines'
 
 gem 'state_machines-activerecord'
+
+gem "factory_bot", "~> 6.4"

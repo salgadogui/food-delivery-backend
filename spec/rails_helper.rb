@@ -84,6 +84,7 @@ RSpec.configure do |config|
 
   config.include Devise::Test::IntegrationHelpers, type: :request
   config.include APIRequestHelpers, type: :request
+  config.include FactoryBot::Syntax::Methods
 end
 
 
@@ -92,4 +93,5 @@ Shoulda::Matchers.configure do |config|
     with.test_framework :rspec
     with.library :rails
   end
+
 end
