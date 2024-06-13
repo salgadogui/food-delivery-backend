@@ -7,9 +7,12 @@ class OrdersController < ApplicationController
   def index
     if current_user.admin?
       @orders = Order.includes(:store, :order_items)
-    else
+    elsif current_user.seller?
       @orders = Order.includes(:store, :order_items)
         .where(store: current_user.stores.kept)
+    elsif current_user.buyer?
+      @orders = Order.includes(:user)
+        .where(user_id: current_user.id)
     end
   end
 

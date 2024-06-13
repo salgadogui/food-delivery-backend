@@ -1,9 +1,30 @@
 class ProductsController < ApplicationController
-  before_action :authenticate!
+  before_action :authenticate!, except: [:listing]
   skip_forgery_protection only: [:create]
   skip_before_action :verify_authenticity_token, only: [:destroy, :update]
 
   def index
+    if current_user.admin?
+      @products = Product.includes(:store)
+        .where(store_id: params[:store_id])
+    elsif current_user.buyer?
+      @products = Product.includes(:store)
+        .where(store_id: params[:store_id])
+        .where(stores: { state: 'open' })
+    elsif current_user.seller?
+      @products = Product.includes(:store)
+        .where(store: current_user.stores.kept)
+        # bug : fetching only stores with id of 1. Need to remove get "products" => products#index route
+        # and insert it as a child in the stores table, along with form to add product
+    end
+
+    respond_to do |format|
+      format.html
+      format.json { render json: @products, status: :ok }
+    end
+  end
+
+  def listing
     if current_user.admin?
       @products = Product.includes(:store)
     else
@@ -14,7 +35,7 @@ class ProductsController < ApplicationController
     respond_to do |format|
       format.html
       format.json { render json: @products, status: :ok }
-    end
+    end    
   end
 
   def show
