@@ -81,3 +81,7 @@ gem 'state_machines'
 gem 'state_machines-activerecord'
 
 gem "factory_bot", "~> 6.4"
+
+gem "faraday", "~> 2.9"
+
+gem "sidekiq", "~> 7.2"
