@@ -105,6 +105,7 @@ GEM
       ruby2_keywords
     error_highlight (0.6.0)
     erubi (1.12.0)
+    eventmachine (1.2.7)
     factory_bot (6.4.6)
       activesupport (>= 5.0.0)
     faker (3.2.3)
@@ -289,6 +290,7 @@ DEPENDENCIES
   diff-lcs (~> 1.5.1)
   discard (~> 1.2)
   error_highlight (>= 0.4.0)
+  eventmachine (~> 1.2)
   factory_bot (~> 6.4)
   faker
   faraday (~> 2.9)

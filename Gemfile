@@ -85,3 +85,5 @@ gem "factory_bot", "~> 6.4"
 gem "faraday", "~> 2.9"
 
 gem "sidekiq", "~> 7.2"
+
+gem "eventmachine", "~> 1.2"
