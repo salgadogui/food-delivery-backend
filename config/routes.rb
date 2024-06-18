@@ -13,7 +13,11 @@ Rails.application.routes.draw do
 
   resources :stores do
     resources :products
-    resources :orders
+    resources :orders do
+      member do 
+        get 'status', to: 'orders#status'
+      end
+    end
 
     member do
       patch :toggle_state

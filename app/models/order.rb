@@ -10,6 +10,7 @@ class Order < ApplicationRecord
   state_machine initial: :order_placed do
     state :order_placed
     state :order_confirmed
+    state :preparing_order
     state :out_for_delivery
     state :delivered
     state :canceled
@@ -18,11 +19,15 @@ class Order < ApplicationRecord
       transition order_placed: :order_confirmed
     end
 
-    event :out_for_delivery do
-      transition order_confirmed: :out_for_delivery
+    event :prepare_order do
+      transition order_confirmed: :preparing_order
     end
 
     event :deliver_order do
+      transition preparing_order: :out_for_delivery
+    end
+
+    event :close_order do
       transition out_for_delivery: :delivered
     end
 
