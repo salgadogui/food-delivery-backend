@@ -16,6 +16,8 @@ Rails.application.routes.draw do
     resources :orders do
       member do 
         get 'status', to: 'orders#status'
+        patch 'update_status'
+        post 'confirm_order'
       end
     end
 

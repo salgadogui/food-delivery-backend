@@ -4,7 +4,7 @@ class OrdersController < ApplicationController
   before_action :authenticate!
   before_action :find_store, only: [:new, :create]
   before_action :check_store_state, only: [:create]
-  skip_forgery_protection only: [:create]
+  skip_forgery_protection only: [:create, :confirm_order]
 
 
   def status
@@ -25,6 +25,18 @@ class OrdersController < ApplicationController
     end
   end
 
+  def confirm_order
+    @order = Order.find(params[:id])
+    payment_details = payment_params
+
+    if @order.confirm_order
+      process_payment(@order, payment_details)
+      render json: { message: 'Order confirmed and payment processing started' }, status: :ok
+    else
+      render json: { error: 'Order confirmation failed' }, status: :unprocessable_entity
+    end
+  end
+
   def update_status
     @order = Order.find(params[:id])
     case params[:status]
@@ -32,7 +44,7 @@ class OrdersController < ApplicationController
         @order.deliver_order
       when 'order_delivered'
         @order.close_order
-        handle_order_completion(@order, sse)
+        handle_order_completion(@order)
       else
         render json: { error: 'Invalid status' }, status: :unprocessable_entity
         return
@@ -43,8 +55,8 @@ class OrdersController < ApplicationController
       sse = ActionController::Live::SSE.new(response.stream, retry: 300, event: "order-status")
       begin
         sse.write({ status: @order.state, order_id: @order.id }, event: "order-status")
-      rescue IOError
-        handle_disconnect(@order, sse)
+      rescue IOError, ActionController::Live::ClientDisconnected
+        handle_disconnect(@order)
       ensure
         sse.close
       end
@@ -103,15 +115,29 @@ class OrdersController < ApplicationController
         order_items_attributes: [:id, :product_id, :quantity])
     end
 
+    # **SHOULD** be sent by the buyer (as a temp fix, sent by the seller),
+    # but only processed when the order is confirmed by the seller.
+    # So, figure out a way to redirect these params to 
+    # the confirm_order action for usage.
     def payment_params
-      params.require(:payment).permit(:value, :number, :valid, :cvv)
+      params.require(:payment).permit(:order_id, :value, :number, :valid, :cvv)
     end
 
-    def handle_order_completion(order, sse)
+    def process_payment(order, payment_details)
+      PaymentJob.perform_later(
+        order: order,
+        value: payment_details[:value],
+        number: payment_details[:number],
+        valid: payment_details[:valid],
+        cvv: payment_details[:cvv]
+      )
+    end
+
+    def handle_order_completion(order)
       sse.close if order.state == 'delivered' || order.state == 'canceled'
     end
 
-    def handle_disconnect(order, sse)
+    def handle_disconnect(order)
       order.cancel_order unless order.state == 'delivered'
       sse.close
     end
