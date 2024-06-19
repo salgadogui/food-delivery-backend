@@ -4,7 +4,7 @@ class OrdersController < ApplicationController
   before_action :authenticate!
   before_action :find_store, only: [:new, :create]
   before_action :check_store_state, only: [:create]
-  skip_forgery_protection only: [:create, :confirm_order]
+  skip_forgery_protection only: [:create, :confirm_order, :update_status]
 
 
   def status
@@ -44,7 +44,6 @@ class OrdersController < ApplicationController
         @order.deliver_order
       when 'order_delivered'
         @order.close_order
-        handle_order_completion(@order)
       else
         render json: { error: 'Invalid status' }, status: :unprocessable_entity
         return
